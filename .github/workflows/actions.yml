@@ -27,7 +27,19 @@ jobs:
         run: mvn clean test -Dtest=SetupTest#startUpTest
 
     services:
+      teamcity-server-instance:
+        image: jetbrains/teamcity-server
+        ports:
+          - 8111:8111
+      teamcity_agent_instance:
+        image: jetbrains/teamcity-agent
+        env:
+          SERVER_URL: "http://localhost:8111"
       selenoid-chrome:
-        image: selenoid/vnc:chrome_91.0
+        image: selenoid/chrome
       selenoid-ui:
         image: aerokube/selenoid-ui:latest-release
+        ports:
+          - 8080:8080
+        options: >-
+          --selenoid-uri "http://localhost:4444"
